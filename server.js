@@ -3,9 +3,10 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static(__dirname));
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -16,7 +17,7 @@ const pool = new Pool({
 });
 
 app.get("/", (req, res) => {
-    res.send("Horror Movie API is running!");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/movies", async (req, res) => {
@@ -246,7 +247,29 @@ app.get("/genres/:id/movies", async (req, res) => {
 });
 app.post("/movies", async (req, res) => {
     try {
-        const { title, release_year, duration, rating, description, director_id } = req.body;
+        const {
+            title,
+            release_year,
+            duration,
+            rating,
+            description,
+            director_id,
+            genre_id
+        } = req.body;
+
+        if (
+            !title ||
+            !release_year ||
+            !duration ||
+            rating === undefined ||
+            !description ||
+            !director_id ||
+            !genre_id
+        ) {
+            return res.status(400).json({
+                error: "All movie fields are required."
+            });
+        }
 
         const result = await pool.query(`
             INSERT INTO movies
@@ -254,12 +277,32 @@ app.post("/movies", async (req, res) => {
             VALUES
                 ($1, $2, $3, $4, $5, $6)
             RETURNING *;
-        `, [title, release_year, duration, rating, description, director_id]);
+        `, [
+            title,
+            release_year,
+            duration,
+            rating,
+            description,
+            director_id
+        ]);
 
-        res.status(201).json(result.rows[0]);
+        const movie = result.rows[0];
+
+        await pool.query(`
+            INSERT INTO movie_genres
+                (movie_id, genre_id)
+            VALUES
+                ($1, $2);
+        `, [
+            movie.movie_id,
+            genre_id
+        ]);
+
+        res.status(201).json(movie);
 
     } catch (error) {
         console.error(error);
+
         res.status(500).json({
             error: "Failed to create movie"
         });
@@ -267,7 +310,27 @@ app.post("/movies", async (req, res) => {
 });
 app.put("/movies/:id", async (req, res) => {
     try {
-        const { title, release_year, duration, rating, description, director_id } = req.body;
+        const {
+            title,
+            release_year,
+            duration,
+            rating,
+            description,
+            director_id
+        } = req.body;
+
+        if (
+            !title ||
+            !release_year ||
+            !duration ||
+            rating === undefined ||
+            !description ||
+            !director_id
+        ) {
+            return res.status(400).json({
+                error: "All movie fields are required."
+            });
+        }
 
         const result = await pool.query(`
             UPDATE movies
@@ -280,7 +343,15 @@ app.put("/movies/:id", async (req, res) => {
                 director_id = $6
             WHERE movie_id = $7
             RETURNING *;
-        `, [title, release_year, duration, rating, description, director_id, req.params.id]);
+        `, [
+            title,
+            release_year,
+            duration,
+            rating,
+            description,
+            director_id,
+            req.params.id
+        ]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({
@@ -292,6 +363,7 @@ app.put("/movies/:id", async (req, res) => {
 
     } catch (error) {
         console.error(error);
+
         res.status(500).json({
             error: "Failed to update movie"
         });
@@ -323,6 +395,6 @@ app.delete("/movies/:id", async (req, res) => {
         });
     }
 });
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
 });

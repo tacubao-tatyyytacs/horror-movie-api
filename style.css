@@ -1,0 +1,242 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: #eee;
+    line-height: 1.6;
+}
+
+header {
+    background: #1b1b1b;
+    border-bottom: 2px solid #8b0000;
+    padding: 20px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    color: #d00000;
+}
+
+nav a {
+    color: #eee;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+nav a:hover {
+    color: #d00000;
+}
+
+main {
+    width: 84%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.search {
+    display: flex;
+    max-width: 600px;
+    margin: auto;
+}
+
+.search input {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 6px 0 0 6px;
+    font-size: 16px;
+}
+
+button {
+    background: #8b0000;
+    color: white;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #b00000;
+}
+
+.search button {
+    border-radius: 0 6px 6px 0;
+}
+
+section {
+    margin-bottom: 60px;
+}
+
+.form-section {
+    background: #1d1d1d;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.form-section h2 {
+    color: #d00000;
+    margin-bottom: 20px;
+}
+
+form {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 6px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+form button {
+    margin-top: 10px;
+}
+
+#movieGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    background: #1d1d1d;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.movie-card h3 {
+    color: #e00000;
+    margin-bottom: 10px;
+}
+
+.movie-card p {
+    color: #bbb;
+    margin: 5px 0;
+}
+
+.card-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.card-buttons button {
+    flex: 1;
+}
+
+.delete-button {
+    background: #555;
+}
+
+.delete-button:hover {
+    background: #777;
+}
+
+#details {
+    background: #1d1d1d;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+#movieDetails h2 {
+    color: #e00000;
+    margin-bottom: 15px;
+}
+
+#movieDetails p {
+    margin: 8px 0;
+    color: #ccc;
+}
+
+#formMessage,
+#editMessage {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.error {
+    background: #4a1515;
+    color: #ffb3b3;
+}
+
+.success {
+    background: #153d20;
+    color: #b8ffc7;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav a {
+        margin: 0 8px;
+    }
+
+    .hero h2 {
+        font-size: 28px;
+    }
+
+    .search {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search input,
+    .search button {
+        border-radius: 6px;
+    }
+
+    .card-buttons {
+        flex-direction: column;
+    }
+}
